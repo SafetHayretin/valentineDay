@@ -309,6 +309,28 @@
           padding: 8px 14px;
         }
       }
+
+      @media (max-height: 700px) {
+        .card {
+          max-height: 74vh;
+          overflow-y: auto;
+        }
+      }
+
+      @media (max-height: 760px) {
+        .slide {
+          padding-top: 84px;
+          padding-bottom: 130px;
+        }
+
+        .card {
+          max-height: 70vh;
+        }
+
+        .photo-frame {
+          aspect-ratio: 4 / 3;
+        }
+      }
     </style>
   </head>
   <body>
