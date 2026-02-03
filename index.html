@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valentine's Day Presentation</title>
+    <style>
+      :root {
+        --rose-1: #ffb4c8;
+        --rose-2: #ff7aa7;
+        --rose-3: #ff4f87;
+        --cream: #fff6f0;
+        --ink: #2b1a1f;
+        --gold: #ffcb6b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        font-family: "Palatino Linotype", "Book Antiqua", "Georgia", serif;
+        color: var(--ink);
+        background: radial-gradient(circle at top, #fff2f7, #ffdce9 45%, #ffc1d6);
+        overflow: hidden;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        inset: -20%;
+        background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.45), transparent 40%),
+          radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.35), transparent 45%),
+          radial-gradient(circle at 30% 80%, rgba(255, 255, 255, 0.25), transparent 50%);
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      body::after {
+        inset: -10%;
+        background: radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.2), transparent 55%);
+        filter: blur(12px);
+      }
+
+      .cat-wallpaper {
+        position: fixed;
+        inset: 0;
+        background-image: url("cat-bg.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0.18;
+        filter: saturate(1.1);
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .deck {
+        position: relative;
+        height: 100%;
+        z-index: 2;
+      }
+
+      .slide {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        opacity: 0;
+        transform: translateX(40px) scale(0.98);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+        padding: 48px 24px 96px;
+      }
+
+      .slide.active {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+
+      .card {
+        width: min(900px, 92vw);
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 28px;
+        padding: 28px;
+        box-shadow: 0 24px 60px rgba(106, 18, 45, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(8px);
+      }
+
+      .photo-frame {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        border-radius: 22px;
+        overflow: hidden;
+        background: linear-gradient(135deg, rgba(255, 122, 167, 0.2), rgba(255, 202, 220, 0.5));
+      }
+
+      .photo-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: saturate(1.05);
+      }
+
+      .caption {
+        margin-top: 18px;
+        font-size: clamp(20px, 2.4vw, 28px);
+        letter-spacing: 0.5px;
+        text-align: center;
+      }
+
+      .nav {
+        position: fixed;
+        bottom: 22px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        z-index: 3;
+        padding: 10px 16px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 999px;
+        box-shadow: 0 12px 26px rgba(106, 18, 45, 0.16);
+      }
+
+      .meter {
+        position: fixed;
+        top: 22px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 16px;
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 999px;
+        box-shadow: 0 12px 26px rgba(106, 18, 45, 0.16);
+        z-index: 3;
+      }
+
+      .meter-label {
+        font-size: 14px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: #7a384a;
+        font-weight: 700;
+      }
+
+      .meter-track {
+        width: min(240px, 40vw);
+        height: 12px;
+        background: rgba(255, 79, 135, 0.2);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      .meter-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #ff9bb8, #ff5b92);
+        border-radius: 999px;
+        transition: width 0.4s ease;
+      }
+
+      .confetti {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 5;
+        overflow: hidden;
+      }
+
+      .heart {
+        position: absolute;
+        font-size: 22px;
+        animation: floatUp 1.6s ease-out forwards;
+        opacity: 0.9;
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) scale(0.9);
+          opacity: 0.95;
+        }
+        100% {
+          transform: translateY(-180px) scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      .nav button {
+        border: none;
+        background: linear-gradient(135deg, var(--rose-2), var(--rose-3));
+        color: white;
+        font-size: 16px;
+        padding: 10px 18px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .nav button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(255, 79, 135, 0.35);
+      }
+
+      .dots {
+        display: flex;
+        gap: 8px;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(255, 79, 135, 0.3);
+      }
+
+      .dot.active {
+        background: var(--rose-3);
+      }
+
+      .final {
+        display: grid;
+        gap: 22px;
+        text-align: center;
+      }
+
+      .final h1 {
+        margin: 0;
+        font-size: clamp(32px, 4vw, 52px);
+        color: var(--ink);
+      }
+
+      .kittens {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 18px 26px rgba(106, 18, 45, 0.18);
+        background: var(--cream);
+      }
+
+      .kittens img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+      }
+
+      .cta {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .cta button {
+        border: none;
+        padding: 12px 26px;
+        border-radius: 999px;
+        font-size: 18px;
+        cursor: pointer;
+        font-weight: 700;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .yes {
+        background: linear-gradient(135deg, #ff9bb8, #ff6f9f);
+        color: white;
+        box-shadow: 0 12px 20px rgba(255, 111, 159, 0.35);
+      }
+
+      .no {
+        background: var(--gold);
+        color: #5a3700;
+      }
+
+      .yes:hover {
+        transform: translateY(-2px) scale(1.02);
+      }
+
+      .no:hover {
+        transform: translateY(-2px) rotate(-2deg);
+      }
+
+      .love-note {
+        font-size: clamp(18px, 2.2vw, 24px);
+        color: #5f2c3b;
+        min-height: 28px;
+      }
+
+      @media (max-width: 640px) {
+        .card {
+          padding: 20px;
+        }
+
+        .nav {
+          gap: 10px;
+          padding: 8px 12px;
+        }
+
+        .nav button {
+          padding: 8px 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cat-wallpaper" aria-hidden="true"></div>
+
+    <main class="deck" aria-live="polite">
+      <section class="slide active" data-index="0">
+        <div class="card">
+          <div class="photo-frame">
+            <img src="1.jpg" alt="Photo 1" />
+          </div>
+          <div class="caption">Здравей бебитооо направих това за тееееб. 💌</div>
+        </div>
+      </section>
+
+      <section class="slide" data-index="1">
+        <div class="card">
+          <div class="photo-frame">
+            <img src="2.jpg" alt="Photo 2" />
+          </div>
+          <div class="caption">Искам да ти кажа, че много много МНОГООО те обичааааам!!!! 🌹</div>
+        </div>
+      </section>
+
+      <section class="slide" data-index="2">
+        <div class="card">
+          <div class="photo-frame">
+            <img src="3.jpg" alt="Photo 3" />
+          </div>
+          <div class="caption">Благодаря ти, че си в живота ми и ме подкрепяш във всичкооооо!!!!! ✨</div>
+        </div>
+      </section>
+
+      <section class="slide" data-index="3">
+        <div class="card">
+          <div class="photo-frame">
+            <img src="4.jpg" alt="Photo 4" />
+          </div>
+          <div class="caption">Ти си един прекрасен човеккк, обожавааааааам теееееее.  💞</div>
+        </div>
+      </section>
+
+      <section class="slide" data-index="4">
+        <div class="card">
+          <div class="photo-frame">
+            <img src="5.jpg" alt="Photo 5" />
+          </div>
+          <div class="caption">Ти си моето малко котенцеее, Винаги ще бъда до теееб, Затова искам да те попитам(отиди на другия слайд) 🎀</div>
+        </div>
+      </section>
+
+      <section class="slide" data-index="5">
+        <div class="card final">
+          <h1>Ще бъдещ ли моя валентинкааааа?</h1>
+          <div class="kittens">
+            <img src="6.jpg" alt="Kittens" />
+          </div>
+          <div class="cta">
+            <button class="yes" id="yesBtn">Да!</button>
+            <button class="no" id="noBtn">Не</button>
+          </div>
+          <div class="love-note" id="loveNote"></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="meter" aria-hidden="true">
+      <span class="meter-label">Love Meter</span>
+      <div class="meter-track">
+        <div class="meter-fill" id="meterFill"></div>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button id="prevBtn" aria-label="Previous slide">← Prev</button>
+      <div class="dots" id="dots"></div>
+      <button id="nextBtn" aria-label="Next slide">Next →</button>
+    </div>
+
+    <div class="confetti" id="confetti"></div>
+
+    <script>
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const dotsContainer = document.getElementById("dots");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn = document.getElementById("noBtn");
+      const loveNote = document.getElementById("loveNote");
+      const meterFill = document.getElementById("meterFill");
+      const confetti = document.getElementById("confetti");
+
+      let index = 0;
+
+      const loveMessages = [
+        "Yay!! 💖",
+        "You just made my heart sparkle ✨",
+        "Best answer ever 😘",
+        "Happy Valentine's Day! 🌹",
+      ];
+
+      function renderDots() {
+        dotsContainer.innerHTML = "";
+        slides.forEach((_, i) => {
+          const dot = document.createElement("span");
+          dot.className = "dot" + (i === index ? " active" : "");
+          dot.addEventListener("click", () => showSlide(i));
+          dotsContainer.appendChild(dot);
+        });
+      }
+
+      function showSlide(nextIndex) {
+        slides[index].classList.remove("active");
+        index = (nextIndex + slides.length) % slides.length;
+        slides[index].classList.add("active");
+        renderDots();
+        updateMeter();
+      }
+
+      prevBtn.addEventListener("click", () => showSlide(index - 1));
+      nextBtn.addEventListener("click", () => showSlide(index + 1));
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowLeft") showSlide(index - 1);
+        if (event.key === "ArrowRight") showSlide(index + 1);
+      });
+
+      yesBtn.addEventListener("click", () => {
+        loveNote.textContent = "ooooo thank you sooo muuuchhhh";
+        burstHearts();
+      });
+
+      function moveNoButton(event) {
+        const card = noBtn.closest(".card");
+        if (!card) return;
+
+        const cardRect = card.getBoundingClientRect();
+        const btnRect = noBtn.getBoundingClientRect();
+        const btnCenterX = btnRect.left + btnRect.width / 2;
+        const btnCenterY = btnRect.top + btnRect.height / 2;
+
+        const pointerX = event.clientX ?? btnCenterX;
+        const pointerY = event.clientY ?? btnCenterY;
+
+        let dx = btnCenterX - pointerX;
+        let dy = btnCenterY - pointerY;
+        const distance = Math.hypot(dx, dy) || 1;
+
+        dx /= distance;
+        dy /= distance;
+
+        const minPush = 80;
+        const maxPush = 160;
+        const push = minPush + Math.random() * (maxPush - minPush);
+
+        let targetX = (dx * push);
+        let targetY = (dy * push);
+
+        const maxX = cardRect.width / 2 - btnRect.width / 2 - 12;
+        const maxY = cardRect.height / 2 - btnRect.height / 2 - 24;
+
+        targetX = Math.max(-maxX, Math.min(maxX, targetX));
+        targetY = Math.max(-maxY, Math.min(maxY, targetY));
+
+        noBtn.style.transform = `translate(${targetX}px, ${targetY}px)`;
+      }
+
+      noBtn.addEventListener("mouseenter", moveNoButton);
+      noBtn.addEventListener("mousemove", moveNoButton);
+
+      noBtn.addEventListener("click", () => {
+        loveNote.textContent = "Nice try 😜";
+      });
+
+      function updateMeter() {
+        const percent = Math.round((index / (slides.length - 1)) * 100);
+        meterFill.style.width = `${percent}%`;
+      }
+
+      function burstHearts() {
+        const count = 18;
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2 + 40;
+        const emojis = ["💖", "💘", "💝", "💗", "💞"];
+
+        for (let i = 0; i < count; i += 1) {
+          const heart = document.createElement("span");
+          heart.className = "heart";
+          heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+          const angle = Math.random() * Math.PI * 2;
+          const radius = 60 + Math.random() * 120;
+          const x = centerX + Math.cos(angle) * radius;
+          const y = centerY + Math.sin(angle) * radius;
+
+          heart.style.left = `${x}px`;
+          heart.style.top = `${y}px`;
+          heart.style.fontSize = `${18 + Math.random() * 16}px`;
+
+          confetti.appendChild(heart);
+
+          heart.addEventListener("animationend", () => {
+            heart.remove();
+          });
+        }
+      }
+
+      renderDots();
+      updateMeter();
+    </script>
+  </body>
+</html>
