@@ -426,6 +426,9 @@
         slides[index].classList.add("active");
         renderDots();
         updateMeter();
+        if (index !== slides.length - 1) {
+          noBtn.style.transform = "translate(0px, 0px)";
+        }
       }
 
       prevBtn.addEventListener("click", () => showSlide(index - 1));
@@ -481,6 +484,10 @@
 
       noBtn.addEventListener("click", () => {
         loveNote.textContent = "Nice try 😜";
+      });
+
+      noBtn.addEventListener("mouseleave", () => {
+        noBtn.style.transform = "translate(0px, 0px)";
       });
 
       function updateMeter() {
