@@ -61,24 +61,38 @@
 
       .deck {
         position: relative;
-        height: 100%;
+        min-height: 100vh;
         z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        padding: 88px 0 40px;
       }
 
       .slide {
-        position: absolute;
-        inset: 0;
-        display: grid;
-        place-items: center;
-        opacity: 0;
-        transform: translateX(40px) scale(0.98);
-        transition: opacity 0.6s ease, transform 0.6s ease;
-        padding: 48px 24px 96px;
+        width: 100%;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 0 24px;
       }
 
       .slide.active {
-        opacity: 1;
-        transform: translateX(0) scale(1);
+        display: flex;
+        animation: fadeIn 0.45s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .card {
@@ -93,7 +107,7 @@
 
       .photo-frame {
         position: relative;
-        aspect-ratio: 16 / 9;
+        height: clamp(220px, 48vh, 420px);
         border-radius: 22px;
         overflow: hidden;
         background: linear-gradient(135deg, rgba(255, 122, 167, 0.2), rgba(255, 202, 220, 0.5));
@@ -115,10 +129,7 @@
       }
 
       .nav {
-        position: fixed;
-        bottom: 22px;
-        left: 50%;
-        transform: translateX(-50%);
+        position: relative;
         display: flex;
         align-items: center;
         gap: 14px;
@@ -127,6 +138,8 @@
         background: rgba(255, 255, 255, 0.8);
         border-radius: 999px;
         box-shadow: 0 12px 26px rgba(106, 18, 45, 0.16);
+        width: min(900px, 92vw);
+        justify-content: space-between;
       }
 
       .meter {
@@ -310,25 +323,14 @@
         }
       }
 
-      @media (max-height: 700px) {
-        .card {
-          max-height: 74vh;
-          overflow-y: auto;
-        }
-      }
-
-      @media (max-height: 760px) {
-        .slide {
-          padding-top: 84px;
-          padding-bottom: 130px;
-        }
-
-        .card {
-          max-height: 70vh;
+      @media (max-height: 720px) {
+        .deck {
+          padding-top: 76px;
+          padding-bottom: 28px;
         }
 
         .photo-frame {
-          aspect-ratio: 4 / 3;
+          height: clamp(180px, 40vh, 320px);
         }
       }
     </style>
@@ -395,8 +397,6 @@
           <div class="love-note" id="loveNote"></div>
         </div>
       </section>
-    </main>
-
     <div class="meter" aria-hidden="true">
       <span class="meter-label">Love Meter</span>
       <div class="meter-track">
@@ -404,11 +404,12 @@
       </div>
     </div>
 
-    <div class="nav">
-      <button id="prevBtn" aria-label="Previous slide">← Prev</button>
-      <div class="dots" id="dots"></div>
-      <button id="nextBtn" aria-label="Next slide">Next →</button>
-    </div>
+      <div class="nav">
+        <button id="prevBtn" aria-label="Previous slide">← Prev</button>
+        <div class="dots" id="dots"></div>
+        <button id="nextBtn" aria-label="Next slide">Next →</button>
+      </div>
+    </main>
 
     <div class="confetti" id="confetti"></div>
 
