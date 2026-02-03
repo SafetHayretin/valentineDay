@@ -20,12 +20,11 @@
 
       html,
       body {
-        height: 100%;
         margin: 0;
         font-family: "Palatino Linotype", "Book Antiqua", "Georgia", serif;
         color: var(--ink);
         background: radial-gradient(circle at top, #fff2f7, #ffdce9 45%, #ffc1d6);
-        overflow: hidden;
+        overflow-y: auto;
       }
 
       body::before,
@@ -61,12 +60,10 @@
 
       .deck {
         position: relative;
-        min-height: 100vh;
         z-index: 2;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         gap: 18px;
         padding: 88px 0 40px;
       }
@@ -107,7 +104,6 @@
 
       .photo-frame {
         position: relative;
-        height: clamp(220px, 48vh, 420px);
         border-radius: 22px;
         overflow: hidden;
         background: linear-gradient(135deg, rgba(255, 122, 167, 0.2), rgba(255, 202, 220, 0.5));
@@ -115,7 +111,7 @@
 
       .photo-frame img {
         width: 100%;
-        height: 100%;
+        height: auto;
         object-fit: cover;
         display: block;
         filter: saturate(1.05);
@@ -328,10 +324,6 @@
           padding-top: 76px;
           padding-bottom: 28px;
         }
-
-        .photo-frame {
-          height: clamp(180px, 40vh, 320px);
-        }
       }
     </style>
   </head>
@@ -452,6 +444,7 @@
         if (index !== slides.length - 1) {
           noBtn.style.transform = "translate(0px, 0px)";
         }
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
       prevBtn.addEventListener("click", () => showSlide(index - 1));
@@ -509,9 +502,6 @@
         loveNote.textContent = "Nice try 😜";
       });
 
-      noBtn.addEventListener("mouseleave", () => {
-        noBtn.style.transform = "translate(0px, 0px)";
-      });
 
       function updateMeter() {
         const percent = Math.round((index / (slides.length - 1)) * 100);
